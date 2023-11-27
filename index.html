@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TicTacToe</title>
+</head>
+<body>
+  <div class="select-box" id="selectBox">
+    <header>Tic Tac Toe</header>
+    <div class="content">
+      <div class="title">Who you are:</div>
+      <div class="options" id="players">
+        <button id="x" value="x">X</button>
+        <button id="circle" value="circle">O</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="board" id="board">
+    <div class="cell" data-cell id="0"></div>
+    <div class="cell" data-cell id="1"></div>
+    <div class="cell" data-cell id="2"></div>
+    <div class="cell" data-cell id="3"></div>
+    <div class="cell" data-cell id="4"></div>
+    <div class="cell" data-cell id="5"></div>
+    <div class="cell" data-cell id="6"></div>
+    <div class="cell" data-cell id="7"></div>
+    <div class="cell" data-cell id="8"></div>
+  </div>
+
+  <div class="result-box" id="winningMessage">
+    <div data-winning-message-text></div>
+    <button id="restartBtn">Restart</button>
+  </div>
+</body>
+</html>
