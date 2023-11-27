@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+*, *::after, *::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  font-size: 62.5%;
+  --cell-size: 10rem;
+  --mark-size: calc(var(--cell-size) * .9);
+
+  --main-bg-color: #6aa6fe;
+  --selectBox-color: #fff;
+  --text-color: #140f07;
+}
+
+body {
+  font-size: 1.6rem;
+  background-color: var(--main-bg-color);
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: auto;
+  place-content: center;
+  font-family: "Poppins", sans-serif;
+}
+
+.select-box {
+  background-color: var(--selectBox-color);
+  padding: 2rem 2.5rem 2.5rem;
+  max-width: 40rem;
+  width: 100%;
+  border-radius: 5px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
+}
+
+.select-box.hide {
+  transform: scale(0);
+  pointer-events: none;
+}
+
+.select-box header {
+  font-size: 3rem;
+  font-weight: 600;
+  padding-bottom: 10px;
+  border-bottom: 1px solid lightgray;
+}
+
+.select-box .title{
+  font-size: 22px;
+  font-weight: 500;
+  margin: 20px 0;
+}
+
+.select-box .options {
+  display: flex;
+  width: 100%;
+}
+
+.options button {
+  width: 100%;
+  font-size: 2rem;
+  font-weight: 500;
+  outline: none;
+  border: none;
+  padding: 10px 50px;
+  border-radius: 5px;
+  margin-right: 5px;
+  background-color: var(--main-bg-color);
+  color: var(--selectBox-color);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.options button:hover,
+.btn button:hover{
+  transform: scale(0.96);
+}
