@@ -3,8 +3,9 @@ const Game = (() => {
   const modalSelectPlayer = document.getElementById('selectBox');
   const cellsElements = document.querySelectorAll('[data-cell]');
   const resultBox = document.getElementById('winningMessage');
-  const winningMessage = document.querySelector('[data-winning-message-text]')
+  const winningMessage = document.querySelector('[data-winning-message-text]');
   const btnPlayers = document.getElementById('players');
+  const restartButton = document.getElementById('restartBtn')
   const winCombos =[
     [0,1,2],
     [3,4,5],
@@ -18,7 +19,6 @@ const Game = (() => {
   let origBoard;
   let aiPlayer;
   let Hplayer;
-  let currentPlayer = "x";
 
   const startGame = () => {
     origBoard = Array.from(Array(9).keys());
@@ -27,6 +27,8 @@ const Game = (() => {
       modalSelectPlayer.classList.add('hide');
       board.classList.remove('hide');
     })
+
+    restartButton.addEventListener('click', resetGame)
 
     cellsElements.forEach(cell => {
       cell.addEventListener('click', handleClick, {once:true});
@@ -37,12 +39,15 @@ const Game = (() => {
     turn(square.target,square.target.id, Hplayer);
   }
 
+  const resetGame = () => {
+    window.location.reload()
+  }
+
   const turn = (squareClass,squareId, player) => {
     origBoard[squareId] = player;
     squareClass.classList.add(player);
     let gameWon = checkWin(origBoard, player);
-
-    if(gameWon) gameOver(gameWon)
+    if(gameWon) gameOver(gameWon);
   }
 
   const checkWin = (board, player) => {
