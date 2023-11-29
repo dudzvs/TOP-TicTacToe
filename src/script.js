@@ -24,11 +24,12 @@ const Game = (() => {
     origBoard = Array.from(Array(9).keys());
     btnPlayers.addEventListener('click', (e) => {
       Hplayer = e.target.value;
+      aiPlayer = Hplayer === "x" ? "circle" : "x";
       modalSelectPlayer.classList.add('hide');
       board.classList.remove('hide');
     })
 
-    restartButton.addEventListener('click', resetGame)
+    restartButton.addEventListener('click', resetGame);
 
     cellsElements.forEach(cell => {
       cell.addEventListener('click', handleClick, {once:true});
@@ -36,11 +37,20 @@ const Game = (() => {
   }
 
   const handleClick = (square) => {
-    turn(square.target,square.target.id, Hplayer);
+    if(!checkWin(origBoard, Hplayer) && !checkTie()) {
+      turn(square.target, square.target.id, Hplayer)
+      if(!checkWin(origBoard, Hplayer)&& !checkTie()) {
+        setTimeout(() => {
+          turn(cellsElements[computerMove()], aiPlayer);
+        }, 500)        
+      }else if(checkTie()) {
+        displayResult("It's a tie!")
+      }
+    }
   }
 
   const resetGame = () => {
-    window.location.reload()
+    window.location.reload();
   }
 
   const turn = (squareClass,squareId, player) => {
@@ -65,7 +75,31 @@ const Game = (() => {
   }
 
   const gameOver = (gameWon) => {
-    winningMessage.innerHTML = `${gameWon.player === "circle" ? 'O' : 'X'}'s wins!!`
+    if (gameWon) {
+        displayResult(`${gameWon.player === "circle" ? 'O' : 'X'}'s wins!!`);
+    }
+  }
+
+  const displayResult = (message) => {
+    resultBox.classList.add('show');
+    winningMessage.innerHTML = message;
+  }
+
+  const checkTie = () => {
+    return emptySquares().length === 0;
+  }
+
+  const emptySquares = () => {
+    return origBoard.filter(s => typeof s === "number")
+  }
+  
+  const computerMove = () => {
+    const availableSquares = emptySquares();
+    const randomIndex = Math.floor(Math.random() * availableSquares.length);
+    const squareId = availableSquares[randomIndex];
+    
+    turn(cellsElements[squareId], squareId, aiPlayer);
+    return squareId;
   }
 
   return {
