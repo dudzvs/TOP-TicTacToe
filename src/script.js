@@ -5,59 +5,64 @@ const Game = (() => {
   const resultBox = document.getElementById('winningMessage');
   const winningMessage = document.querySelector('[data-winning-message-text]');
   const btnPlayers = document.getElementById('players');
-  const restartButton = document.getElementById('restartBtn')
-  const winCombos =[
-    [0,1,2],
-    [3,4,5],
-    [6,7,8],
-    [0,3,6],
-    [1,4,7],
-    [2,5,8],
-    [0,4,8],
-    [2,4,6]
+  const restartButton = document.getElementById('restartBtn');
+  const winCombos = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
   ];
+
   let origBoard;
   let aiPlayer;
   let Hplayer;
 
   const startGame = () => {
     origBoard = Array.from(Array(9).keys());
-    btnPlayers.addEventListener('click', (e) => {
-      Hplayer = e.target.value;
-      aiPlayer = Hplayer === "x" ? "circle" : "x";
-      modalSelectPlayer.classList.add('hide');
-      board.classList.remove('hide');
-    })
-
+    btnPlayers.addEventListener('click', handlePlayerButtonClick);
     restartButton.addEventListener('click', resetGame);
 
     cellsElements.forEach(cell => {
-      cell.addEventListener('click', handleClick, {once:true});
-    })
+      cell.addEventListener('click', handleCellClick, { once: true });
+    });
   }
 
-  const handleClick = (square) => {
-    if(!checkWin(origBoard, Hplayer) && !checkTie()) {
-      turn(square.target, square.target.id, Hplayer)
-      if(!checkWin(origBoard, Hplayer)&& !checkTie()) {
+  const handlePlayerButtonClick = (e) => {
+    Hplayer = e.target.value;
+    aiPlayer = Hplayer === "x" ? "circle" : "x";
+    modalSelectPlayer.classList.add('hide');
+    board.classList.remove('hide');
+  }
+
+  const handleCellClick = (event) => {
+    if (!checkWin(origBoard, Hplayer) && !checkTie()) {
+      makeMove(event.target, Hplayer);
+      if (!checkWin(origBoard, Hplayer) && !checkTie()) {
         setTimeout(() => {
-          turn(cellsElements[computerMove()], aiPlayer);
-        }, 500)        
-      }else if(checkTie()) {
-        displayResult("It's a tie!")
+          makeMove(cellsElements[computerMove()], aiPlayer);
+        }, 500);
+      } else if (checkTie()) {
+        displayResult("It's a tie!");
       }
+    }
+  }
+
+  const makeMove = (squareClass, player) => {
+    const squareId = squareClass.id;
+    origBoard[squareId] = player;
+    squareClass.classList.add(player);
+    let gameWon = checkWin(origBoard, player);
+    if (gameWon) {
+      gameOver(gameWon);
     }
   }
 
   const resetGame = () => {
     window.location.reload();
-  }
-
-  const turn = (squareClass,squareId, player) => {
-    origBoard[squareId] = player;
-    squareClass.classList.add(player);
-    let gameWon = checkWin(origBoard, player);
-    if(gameWon) gameOver(gameWon);
   }
 
   const checkWin = (board, player) => {
@@ -76,7 +81,7 @@ const Game = (() => {
 
   const gameOver = (gameWon) => {
     if (gameWon) {
-        displayResult(`${gameWon.player === "circle" ? 'O' : 'X'}'s wins!!`);
+      displayResult(`${gameWon.player === "circle" ? 'O' : 'X'}'s wins!!`);
     }
   }
 
@@ -92,19 +97,18 @@ const Game = (() => {
   const emptySquares = () => {
     return origBoard.filter(s => typeof s === "number")
   }
-  
+
   const computerMove = () => {
     const availableSquares = emptySquares();
     const randomIndex = Math.floor(Math.random() * availableSquares.length);
     const squareId = availableSquares[randomIndex];
-    
-    turn(cellsElements[squareId], squareId, aiPlayer);
+
     return squareId;
   }
 
   return {
     startGame
-  }
+  };
 })();
 
-Game.startGame()
+Game.startGame();
